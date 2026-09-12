@@ -14,7 +14,7 @@ npx http-server . -p 8080
 ## Structure
 
 ```
-index.html          One page: hero, work, method, services, studio, contact
+index.html          One page: hero, work, method, services, budget, studio, contact
 assets/css/site.css All styles, brand tokens at the top of the file
 assets/js/site.js   Header state, mobile nav, method accordion, enquiry form
 ```
@@ -36,6 +36,11 @@ loaded from Google Fonts with a system fallback stack.
 - Project visuals are built in CSS (browser and phone mockups) and scale with container
   queries, so there are no image assets to manage. `.proj-shot` is a `container-type: size`
   element — the artwork inside is sized in `cqw`/`cqh` and fits any card aspect ratio.
+- The budget section is a tablist: four levels, each with a CSS-drawn example
+  (salon one-pager, boutique catalogue, hotel booking, parking app). Arrow keys move
+  between levels, and "Explore this level" carries the chosen band into the enquiry form.
+- Prices are quoted in euros in one place only — the budget levels — with the services
+  table pointing at them. Change a number there and update `#services` to match.
 - The enquiry form validates in the browser and hands off to the visitor's mail client via
   `mailto:`. Point the form at a real endpoint if you'd rather collect submissions server-side.
 - Copy, figures and client names in the work section are the studio's current content; update

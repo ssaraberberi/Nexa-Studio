@@ -52,6 +52,42 @@
     });
   });
 
+
+  /* --- budget levels: tablist with roving focus, panels swap in place --- */
+  var tablist = document.querySelector('.tiers');
+  if (tablist) {
+    var tabs = Array.prototype.slice.call(tablist.querySelectorAll('[role="tab"]'));
+    var select = function (tab, focus) {
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      });
+      if (focus) tab.focus();
+    };
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () { select(tab, false); });
+      tab.addEventListener('keydown', function (e) {
+        var step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+        if (step) { e.preventDefault(); select(tabs[(i + step + tabs.length) % tabs.length], true); }
+        else if (e.key === 'Home') { e.preventDefault(); select(tabs[0], true); }
+        else if (e.key === 'End') { e.preventDefault(); select(tabs[tabs.length - 1], true); }
+      });
+    });
+
+    /* "Explore this level" carries the chosen budget into the enquiry form */
+    document.querySelectorAll('[data-explore]').forEach(function (link) {
+      link.addEventListener('click', function () {
+        var band = tablist.querySelector('[aria-selected="true"]').dataset.budget;
+        var select = document.getElementById('f-budget');
+        Array.prototype.forEach.call(select.options, function (opt) {
+          if (opt.text === band) select.value = opt.value;
+        });
+      });
+    });
+  }
+
   /* --- enquiry form: validate here, hand off to the visitor's mail client --- */
   var form = document.getElementById('enquiry');
   var status = document.getElementById('form-status');
